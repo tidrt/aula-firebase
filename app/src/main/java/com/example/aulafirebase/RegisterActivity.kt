@@ -37,16 +37,21 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun createUser() {
         val email = binding.editTextEmail.text.toString()
-        val password = binding.editTextTextPassword.text.toString()
+        val password = binding.editTextPassword.text.toString()
 
         auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
             val successId = it.user?.uid
             val successEmail = it.user?.email
             showMessage("Sucesso ao Cadastrar Usuário com Id: $successId e Email: $successEmail")
+            //userSignOut()
         }.addOnFailureListener {
             val error = it.printStackTrace()
             showMessage("Erro ao Cadastrar Usuário, stacktrace: $error")
         }
+    }
+
+    private fun userSignOut(){
+        auth.signOut()
     }
 
     private fun showMessage(s : String){

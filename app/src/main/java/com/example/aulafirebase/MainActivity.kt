@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoggedActivity::class.java)
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Usuário não está autenticado!", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Usuário não está logado!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -47,6 +47,22 @@ class MainActivity : AppCompatActivity() {
         binding.btnRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.btnLogin.setOnClickListener {
+            userLogin()
+        }
+    }
+
+    private fun userLogin() {
+        val email = binding.editTextLoginEmail.text.toString()
+        val password = binding.editTextLoginPassword.text.toString()
+
+        auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
+            val intent = Intent(this, UserLoginActivity::class.java)
+            startActivity(intent)
+        }.addOnFailureListener {
+            Toast.makeText(this, "Deu errado o seu login!", Toast.LENGTH_SHORT).show()
         }
     }
 }

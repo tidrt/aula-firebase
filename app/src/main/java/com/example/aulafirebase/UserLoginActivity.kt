@@ -5,17 +5,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.aulafirebase.databinding.ActivityLoggedBinding
-import com.example.aulafirebase.databinding.ActivityRegisterBinding
+import com.example.aulafirebase.databinding.ActivityUserLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class LoggedActivity : AppCompatActivity() {
+class UserLoginActivity : AppCompatActivity() {
     private val binding by lazy {
-        ActivityLoggedBinding.inflate(layoutInflater)
-    }
-
-    private val auth by lazy{
-        FirebaseAuth.getInstance()
+        ActivityUserLoginBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +23,10 @@ class LoggedActivity : AppCompatActivity() {
             insets
         }
 
-        binding.btnLoggedSignOut.setOnClickListener {
+        binding.btnSignOut.setOnClickListener {
+            val auth = FirebaseAuth.getInstance()
             auth.signOut()
+
             finish()
         }
     }
