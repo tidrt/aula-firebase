@@ -10,10 +10,15 @@ import com.example.aulafirebase.databinding.ActivityRegisterBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class RegisterActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityRegisterBinding.inflate(layoutInflater)
+    }
+
+    private val dataBase by lazy {
+        FirebaseFirestore.getInstance()
     }
 
     private val auth by lazy{
