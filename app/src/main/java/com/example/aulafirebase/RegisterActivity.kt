@@ -53,6 +53,7 @@ class RegisterActivity : AppCompatActivity() {
             val error = it.printStackTrace()
             showMessage("Erro ao Cadastrar Usuário, stacktrace: $error")
         }
+        finish()
     }
 
     private fun userSignOut(){
