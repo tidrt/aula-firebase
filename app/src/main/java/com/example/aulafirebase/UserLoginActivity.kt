@@ -32,6 +32,10 @@ class UserLoginActivity : AppCompatActivity() {
             insets
         }
 
+        binding.btnList.setOnClickListener {
+            listData()
+        }
+
         binding.btnUpdateDB.setOnClickListener {
             saveOnDb()
         }
@@ -39,6 +43,32 @@ class UserLoginActivity : AppCompatActivity() {
         binding.btnSignOut.setOnClickListener {
             auth.signOut()
             finish()
+        }
+    }
+
+    private fun listData() {
+        val userId = auth.currentUser?.uid
+
+        if(userId != null){
+            val userReference = db.collection("usuarios").document(userId)
+            userReference
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val data = documentSnapshot.data
+                    if(data != null) {
+                        val name = data["nome"]
+                        val age = data["idade"]
+
+                        val text =  "Nome: $name\n" +
+                                    "Idade: $age"
+
+                        binding.txtResult.text = text
+                    }
+                }
+                .addOnFailureListener {
+                    val text = "Não foi possível recuperar dados do banco de dados!"
+                    binding.txtResult.text = text
+                }
         }
     }
 
