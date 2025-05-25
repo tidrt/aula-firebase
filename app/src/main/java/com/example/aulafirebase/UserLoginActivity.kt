@@ -51,8 +51,19 @@ class UserLoginActivity : AppCompatActivity() {
 
         if(userId != null){
             val userReference = db.collection("usuarios").document(userId)
-            userReference
-                .get()
+            userReference.addSnapshotListener { documentSnapshot, error ->
+                val data = documentSnapshot?.data
+                if (data != null){
+                    val name = data["nome"]
+                    val age = data["idade"]
+
+                    val text =  "Nome: $name\n" +
+                                "Idade: $age"
+
+                    binding.txtResult.text = text
+                }
+            }
+                /*.get()
                 .addOnSuccessListener { documentSnapshot ->
                     val data = documentSnapshot.data
                     if(data != null) {
@@ -68,7 +79,7 @@ class UserLoginActivity : AppCompatActivity() {
                 .addOnFailureListener {
                     val text = "Não foi possível recuperar dados do banco de dados!"
                     binding.txtResult.text = text
-                }
+                }*/
         }
     }
 
