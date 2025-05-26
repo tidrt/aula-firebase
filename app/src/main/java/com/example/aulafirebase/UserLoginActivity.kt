@@ -47,11 +47,29 @@ class UserLoginActivity : AppCompatActivity() {
     }
 
     private fun listData() {
-        val userId = auth.currentUser?.uid
+        // val userId = auth.currentUser?.uid
+        val dbReference = db.collection("usuarios")
+        dbReference.addSnapshotListener { querySnapshot, _ ->
+            val listDocuments = querySnapshot?.documents
+            var listResult = ""
 
-        if(userId != null){
-            val userReference = db.collection("usuarios").document(userId)
-            userReference.addSnapshotListener { documentSnapshot, error ->
+            listDocuments?.forEach {
+                val data = it.data
+                if(data != null){
+                    val name = data["nome"]
+                    val age = data["idade"]
+
+                    val text = "Nome: $name Idade: $age\n"
+                    listResult += text
+                }
+            }
+
+            binding.txtResult.text = listResult
+        }
+
+        /*if(userId != null){
+            val dbReference = db.collection("usuarios")
+            dbReference.addSnapshotListener { documentSnapshot, _ ->
                 val data = documentSnapshot?.data
                 if (data != null){
                     val name = data["nome"]
@@ -63,7 +81,7 @@ class UserLoginActivity : AppCompatActivity() {
                     binding.txtResult.text = text
                 }
             }
-                /*.get()
+                *//*.get()
                 .addOnSuccessListener { documentSnapshot ->
                     val data = documentSnapshot.data
                     if(data != null) {
@@ -79,8 +97,8 @@ class UserLoginActivity : AppCompatActivity() {
                 .addOnFailureListener {
                     val text = "Não foi possível recuperar dados do banco de dados!"
                     binding.txtResult.text = text
-                }*/
-        }
+                }*//*
+        }*/
     }
 
     private fun saveOnDb() {
