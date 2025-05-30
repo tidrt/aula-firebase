@@ -51,6 +51,9 @@ dependencies {
     // Authentication
     implementation(libs.firebase.auth)
 
+    // Storage
+    implementation(libs.firebase.storage)
+
     // Firestore
     implementation(libs.firebase.firestore)
 
