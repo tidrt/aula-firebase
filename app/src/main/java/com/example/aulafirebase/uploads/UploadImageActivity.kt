@@ -16,7 +16,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.aulafirebase.R
 import com.example.aulafirebase.databinding.ActivityUploadImageBinding
+import com.example.aulafirebase.helper.Permissions
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
+import java.io.OutputStream
 import java.util.UUID
 
 class UploadImageActivity : AppCompatActivity() {
@@ -57,6 +60,11 @@ class UploadImageActivity : AppCompatActivity() {
         }
     }
 
+    private val permissions = listOf(
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        android.Manifest.permission.CAMERA,
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -67,17 +75,48 @@ class UploadImageActivity : AppCompatActivity() {
             insets
         }
 
+        Permissions.requestPermissions(this, permissions)
+
         binding.btnGallery.setOnClickListener {
             openGallery.launch("image/*") // Aqui definimos o mime type
         }
 
         binding.btnUpload.setOnClickListener {
-            uploadFromGallery()
+            uploadFromCamera()
         }
 
         binding.btnCam.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             openCamera.launch(intent)
+        }
+    }
+
+    private fun uploadFromCamera() {
+
+        // fazer a conversão da imagem para um byte array
+        val outputStream = ByteArrayOutputStream()
+        actualBitmap?.compress(
+            Bitmap.CompressFormat.JPEG,
+            100,
+            outputStream
+        )
+
+        if(actualBitmap != null){
+            storage
+                .getReference("photos")
+                .child("travels")
+                .child("photo.jpeg")
+                .putBytes(outputStream.toByteArray()) // para usarmos uma imagem precisamos empacotar ela com o bytes
+                .addOnSuccessListener { taskSnapshot ->
+                    Toast.makeText(this, "Sucesso ao fazer o Upload para o Firestore", Toast.LENGTH_SHORT).show()
+
+                    taskSnapshot.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
+                        Toast.makeText(this, "Url: ${url.toString()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Falha ao fazer o Upload para o Firestore", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 
