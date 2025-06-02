@@ -32,6 +32,8 @@ class UploadImageActivity : AppCompatActivity() {
         FirebaseStorage.getInstance()
     }
 
+
+
     private var actualUri : Uri? = null
     private var actualBitmap : Bitmap? = null
 
