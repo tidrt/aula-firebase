@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContract
@@ -66,6 +67,23 @@ class UploadImageActivity : AppCompatActivity() {
         android.Manifest.permission.READ_EXTERNAL_STORAGE,
         android.Manifest.permission.CAMERA,
     )
+    
+    // verificar permissões que o usuário negou
+    /*override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String?>,
+        grantResults: IntArray,
+        deviceId: Int
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults, deviceId)
+        permissions.forEachIndexed { i, value ->
+            Log.i("permissions_app", "$i) $value")
+        }
+
+        grantResults.forEachIndexed { i, value ->
+            Log.i("permissions_app", "$i) $value")
+        }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +95,7 @@ class UploadImageActivity : AppCompatActivity() {
             insets
         }
 
-        Permissions.requestPermissions(this, permissions)
+        //  Permissions.requestPermissions(this, permissions, 100)
 
         binding.btnGallery.setOnClickListener {
             openGallery.launch("image/*") // Aqui definimos o mime type
